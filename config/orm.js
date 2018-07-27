@@ -3,7 +3,7 @@ var connection = require('./connection.js');
 // Methods for MySQL commands
 var orm = {
 
-    // selectAll()
+    // selectAll
     selectAll: function (callback) {
         // Run MySQL Query
         connection.query('SELECT * FROM burgers', function (err, result) {
@@ -12,29 +12,36 @@ var orm = {
         });
     },
 
-    // insertOne()
+    // insertOne
     insertOne: function (burger_name, callback) {
 
+        var queryString = 'INSERT INTO burgers (burger_name, devoured) VALUES ("'
+        queryString += burger_name
+        queryString += '", FALSE)'
+        console.log(queryString)
         // Run MySQL Query
-        connection.query('INSERT INTO burgers SET ?', {
-            burger_name: burger_name,
-            devoured: false,
-            date: timestamp
-        }, function (err, result) {
+        connection.query(queryString, 
+         function (err, result) {
             if (err) throw err;
             callback(result);
         });
     },
 
-    // updateOne()
-    updateOne: function (burgerID, callback) {
+    // updateOne
 
-        // Run MySQL Query
-        connection.query('UPDATE burgers SET ? WHERE ?', [{ devoured: true }, { id: burgerID }], function (err, result) {
-            if (err) throw err;
-            callback(result);
+    updateOne: function(table, objColVals, condition, cb) {
+        var queryString = 'UPDATE ' + table;
+   
+        queryString += ' SET ';
+        queryString += objToSql(objColVals);
+        queryString += ' WHERE ';
+        queryString += condition;
+        console.log(queryString)
+        connection.query(queryString, function(err, result) {
+          if (err) throw err;
+          cb(result);
         });
-    }
+      }    
 };
 
 // Export the ORM object in module.exports.
