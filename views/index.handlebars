@@ -1,38 +1,63 @@
-<h1>Eatus of the Burgerus!</h1>
+<div class="container">
+  <div class="row">
 
-<h2>Burgers that are not devoured!</h2>
+    <h1>Eatus of the Burgerus</h1>
+    <div class="col-sm-4">
 
-<ul>
-  {{#each burgers}}
-    {{#unless devoured}}
-      {{this.burger_name}}
-    {{/unless}}
-  {{/each}}
-</ul>
+      <h2>Burgers that are not devoured!</h2>
 
-<h2>Burgers that are devoured!</h2>
+        <ul>
+          {{#each burgers}}
+            {{#unless this.devoured}}
+              <li>
+                {{this.burger_name}}
 
-<ul>
-  {{#each burgers}}
-    {{#if devoured}}
-      {{this.burger_name}}
-    {{/if}}
-  {{/each}}
-</ul>
+                <form action="burgers/update/{{this.id}}?_method=PUT" method="POST">
+                  <input type="hidden" name="devoured" value="1">
+                  <button class="btn" type="submit">Eat!</button>
+                </form>
+              </li>
+            {{/unless}}
+          {{/each}}
+        </ul>
+    </div>
 
-<h2>Add a Burger</h2>
-<form class="create-form" action = "/api/burgers" method = "POST">
+    <div class="col-sm-4">
+      <h2>Burgers to devour!</h2>
+      <ul>
+        {{#each burgers}}
+          {{#if this.devoured}}
+            <li>
+              {{this.burger_name}}
 
-  <div class="form-group">
-    <label for="ca">Burger Name:</label>
-    <input type="text" id="ca" name="burger_name">
+              <form action="burgers/update/{{this.id}}?_method=PUT" method="POST">
+                <input type="hidden" name="devoured" value="0">
+                <button class="btn" type="submit">DEVOUR!</button>
+              </form>
+            </li>
+          {{/if}}
+        {{/each}}
+      </ul>
+    </div>
+
+    <div class="col-sm-4">
+      <h2>Add a Burger</h2>
+      <form class="create-update-form" action="/api/burgers" method="POST">
+
+        <div class="form-group">
+          <label for="bu">Burger Name:</label>
+          <input type="text" id="bu" name="burger_name">
+        </div>
+
+        <div class="form-group">
+          <label for="slee">Devoured?</label><br>
+          <input type="radio" name="devoured" value="0" checked> Devoured<br>
+          <input type="radio" name="devoured" value="1"> Not Devoured
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Burger</button>
+      </form>
+    </div>
+
   </div>
-
-  <div class="form-group">
-    <label for="devoured">Devoured?</label><br>
-    <input type="radio" name="devoured" value="1" checked> Devoured!<br>
-    <input type="radio" name="devoured" value="0"> Not Devoured
-  </div>
-
-  <button type="submit">Add Burger</button>
-</form>
+</div>
